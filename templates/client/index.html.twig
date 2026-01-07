@@ -16,6 +16,27 @@
     </div>
 </div>
 
+<div class="premium-card mb-4">
+    <form method="get" action="{{ path('app_client_index') }}" class="row g-3 align-items-end">
+        <div class="col-md-10">
+            <label class="form-label">Rechercher</label>
+            <input type="text" name="search" class="form-control" placeholder="Nom, prénom, téléphone, numéro de permis..." value="{{ search }}">
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn-premium btn-premium-primary w-100">
+                <i class="bi bi-search"></i> Rechercher
+            </button>
+        </div>
+        {% if search %}
+        <div class="col-12">
+            <a href="{{ path('app_client_index') }}" class="btn-premium btn-premium-secondary btn-sm">
+                <i class="bi bi-x-circle"></i> Réinitialiser
+            </a>
+        </div>
+        {% endif %}
+    </form>
+</div>
+
 <div class="premium-card">
     <div style="overflow-x: auto;">
         <table class="premium-table">
@@ -32,7 +53,9 @@
             <tbody>
                 {% for client in clients %}
                     <tr>
-                        <td><span style="color: var(--gray-500); font-weight: 600;">#{{ client.id }}</span></td>
+                        <td>
+                            <span style="color: var(--gray-500); font-weight: 600;">#{{ client.id }}</span>
+                        </td>
                         <td>
                             <div style="font-weight: 700; color: var(--gray-900); font-size: 15px;">
                                 {{ client.prenom }} {{ client.nom }}
@@ -49,7 +72,7 @@
                             </span>
                         </td>
                         <td>
-                            <span style="font-family: 'Courier New', monospace; font-size: 13px; color: var(--gray-600); background: var(--gray-100); padding: 4px 10px; border-radius: var(--radius-md);">
+                            <span style="font-family: 'Courier New', monospace; font-size: 13px; color: var(--gray-600); background: var(--gray-100); padding: 4px 10px; border-radius: var(--radius-md); display: inline-block;">
                                 {{ client.numeroPermis }}
                             </span>
                         </td>
@@ -81,5 +104,17 @@
             </tbody>
         </table>
     </div>
+    {% if clients.getTotalItemCount > 0 %}
+    <div class="d-flex justify-content-between align-items-center mt-4 pt-4 border-top">
+        <div style="color: var(--gray-600); font-size: 14px;">
+            Affichage de {{ clients.getCurrentPageNumber * clients.getItemNumberPerPage - clients.getItemNumberPerPage + 1 }} 
+            à {{ clients.getCurrentPageNumber * clients.getItemNumberPerPage > clients.getTotalItemCount ? clients.getTotalItemCount : clients.getCurrentPageNumber * clients.getItemNumberPerPage }} 
+            sur {{ clients.getTotalItemCount }} client(s)
+        </div>
+        <div>
+            {{ knp_pagination_render(clients) }}
+        </div>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

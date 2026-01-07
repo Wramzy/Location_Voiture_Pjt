@@ -6,6 +6,7 @@ use App\Entity\Client;
 use App\Form\ClientType;
 use App\Repository\ClientRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,10 +16,38 @@ use Symfony\Component\Routing\Attribute\Route;
 final class ClientController extends AbstractController
 {
     #[Route(name: 'app_client_index', methods: ['GET'])]
-    public function index(ClientRepository $clientRepository): Response
-    {
+    public function index(
+        ClientRepository $clientRepository,
+        Request $request,
+        PaginatorInterface $paginator
+    ): Response {
+        $search = $request->query->get('search');
+
+        $queryBuilder = $clientRepository->createQueryBuilder('c');
+
+        if ($search) {
+            $queryBuilder->andWhere(
+                $queryBuilder->expr()->orX(
+                    $queryBuilder->expr()->like('c.nom', ':search'),
+                    $queryBuilder->expr()->like('c.prenom', ':search'),
+                    $queryBuilder->expr()->like('c.telephone', ':search'),
+                    $queryBuilder->expr()->like('c.numeroPermis', ':search')
+                )
+            )->setParameter('search', '%' . $search . '%');
+        }
+
+        $queryBuilder->orderBy('c.nom', 'ASC')
+            ->addOrderBy('c.prenom', 'ASC');
+
+        $pagination = $paginator->paginate(
+            $queryBuilder->getQuery(),
+            $request->query->getInt('page', 1),
+            10 // Nombre d'éléments par page
+        );
+
         return $this->render('client/index.html.twig', [
-            'clients' => $clientRepository->findAll(),
+            'clients' => $pagination,
+            'search' => $search,
         ]);
     }
 

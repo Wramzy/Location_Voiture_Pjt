@@ -6,6 +6,7 @@ use App\Entity\Vehicle;
 use App\Form\VehicleType;
 use App\Repository\VehicleRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,10 +16,44 @@ use Symfony\Component\Routing\Attribute\Route;
 final class VehicleController extends AbstractController
 {
     #[Route(name: 'app_vehicle_index', methods: ['GET'])]
-    public function index(VehicleRepository $vehicleRepository): Response
-    {
+    public function index(
+        VehicleRepository $vehicleRepository,
+        Request $request,
+        PaginatorInterface $paginator
+    ): Response {
+        $search = $request->query->get('search');
+        $statut = $request->query->get('statut');
+
+        $queryBuilder = $vehicleRepository->createQueryBuilder('v');
+
+        if ($search) {
+            $queryBuilder->andWhere(
+                $queryBuilder->expr()->orX(
+                    $queryBuilder->expr()->like('v.marque', ':search'),
+                    $queryBuilder->expr()->like('v.modele', ':search'),
+                    $queryBuilder->expr()->like('v.immatriculation', ':search')
+                )
+            )->setParameter('search', '%' . $search . '%');
+        }
+
+        if ($statut) {
+            $queryBuilder->andWhere('v.statut = :statut')
+                ->setParameter('statut', $statut);
+        }
+
+        $queryBuilder->orderBy('v.marque', 'ASC')
+            ->addOrderBy('v.modele', 'ASC');
+
+        $pagination = $paginator->paginate(
+            $queryBuilder->getQuery(),
+            $request->query->getInt('page', 1),
+            10 // Nombre d'éléments par page
+        );
+
         return $this->render('vehicle/index.html.twig', [
-            'vehicles' => $vehicleRepository->findAll(),
+            'vehicles' => $pagination,
+            'search' => $search,
+            'statut' => $statut,
         ]);
     }
 

@@ -1,0 +1,49 @@
+{% if pageCount > 1 %}
+<nav aria-label="Pagination">
+    <ul class="pagination mb-0" style="display: flex; gap: 4px; list-style: none; padding: 0;">
+        {% if previous is defined %}
+            <li class="page-item">
+                <a class="page-link" href="{{ path(route, query|merge({(pageParameterName): previous})) }}" style="border-radius: var(--radius-md); border: 1px solid var(--gray-200); color: var(--gray-700); padding: 8px 12px; text-decoration: none; transition: all 0.2s ease;">
+                    <i class="bi bi-chevron-left"></i>
+                </a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <span class="page-link" style="border-radius: var(--radius-md); border: 1px solid var(--gray-200); color: var(--gray-400); padding: 8px 12px; background: var(--gray-50); cursor: not-allowed;">
+                    <i class="bi bi-chevron-left"></i>
+                </span>
+            </li>
+        {% endif %}
+
+        {% for page in pagesInRange %}
+            {% if page != current %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ path(route, query|merge({(pageParameterName): page})) }}" style="border-radius: var(--radius-md); border: 1px solid var(--gray-200); color: var(--gray-700); padding: 8px 12px; min-width: 40px; text-align: center; text-decoration: none; transition: all 0.2s ease; display: block;">
+                        {{ page }}
+                    </a>
+                </li>
+            {% else %}
+                <li class="page-item active">
+                    <span class="page-link" style="border-radius: var(--radius-md); background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; padding: 8px 12px; min-width: 40px; text-align: center; font-weight: 600; display: block;">
+                        {{ page }}
+                    </span>
+                </li>
+            {% endif %}
+        {% endfor %}
+
+        {% if next is defined %}
+            <li class="page-item">
+                <a class="page-link" href="{{ path(route, query|merge({(pageParameterName): next})) }}" style="border-radius: var(--radius-md); border: 1px solid var(--gray-200); color: var(--gray-700); padding: 8px 12px; text-decoration: none; transition: all 0.2s ease;">
+                    <i class="bi bi-chevron-right"></i>
+                </a>
+            </li>
+        {% else %}
+            <li class="page-item disabled">
+                <span class="page-link" style="border-radius: var(--radius-md); border: 1px solid var(--gray-200); color: var(--gray-400); padding: 8px 12px; background: var(--gray-50); cursor: not-allowed;">
+                    <i class="bi bi-chevron-right"></i>
+                </span>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}

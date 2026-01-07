@@ -16,6 +16,36 @@
     </div>
 </div>
 
+<div class="premium-card mb-4">
+    <form method="get" action="{{ path('app_vehicle_index') }}" class="row g-3 align-items-end">
+        <div class="col-md-6">
+            <label class="form-label">Rechercher</label>
+            <input type="text" name="search" class="form-control" placeholder="Marque, modèle, immatriculation..." value="{{ search }}">
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Statut</label>
+            <select name="statut" class="form-select">
+                <option value="">Tous les statuts</option>
+                <option value="disponible" {% if statut == 'disponible' %}selected{% endif %}>Disponible</option>
+                <option value="loué" {% if statut == 'loué' %}selected{% endif %}>Loué</option>
+                <option value="maintenance" {% if statut == 'maintenance' %}selected{% endif %}>Maintenance</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn-premium btn-premium-primary w-100">
+                <i class="bi bi-search"></i> Rechercher
+            </button>
+        </div>
+        {% if search or statut %}
+        <div class="col-12">
+            <a href="{{ path('app_vehicle_index') }}" class="btn-premium btn-premium-secondary btn-sm">
+                <i class="bi bi-x-circle"></i> Réinitialiser
+            </a>
+        </div>
+        {% endif %}
+    </form>
+</div>
+
 <div class="premium-card">
     <div style="overflow-x: auto;">
         <table class="premium-table">
@@ -32,7 +62,9 @@
             <tbody>
                 {% for vehicle in vehicles %}
                     <tr>
-                        <td><span style="color: var(--gray-500); font-weight: 600;">#{{ vehicle.id }}</span></td>
+                        <td>
+                            <span style="color: var(--gray-500); font-weight: 600;">#{{ vehicle.id }}</span>
+                        </td>
                         <td>
                             <div style="font-weight: 700; color: var(--gray-900); font-size: 15px;">
                                 {{ vehicle.marque }} {{ vehicle.modele }}
@@ -87,5 +119,17 @@
             </tbody>
         </table>
     </div>
+    {% if vehicles.getTotalItemCount > 0 %}
+    <div class="d-flex justify-content-between align-items-center mt-4 pt-4 border-top">
+        <div style="color: var(--gray-600); font-size: 14px;">
+            Affichage de {{ vehicles.getCurrentPageNumber * vehicles.getItemNumberPerPage - vehicles.getItemNumberPerPage + 1 }} 
+            à {{ vehicles.getCurrentPageNumber * vehicles.getItemNumberPerPage > vehicles.getTotalItemCount ? vehicles.getTotalItemCount : vehicles.getCurrentPageNumber * vehicles.getItemNumberPerPage }} 
+            sur {{ vehicles.getTotalItemCount }} véhicule(s)
+        </div>
+        <div>
+            {{ knp_pagination_render(vehicles) }}
+        </div>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}
