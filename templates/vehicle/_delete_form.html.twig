@@ -1,0 +1,6 @@
+<form method="post" action="{{ path('app_vehicle_delete', {'id': vehicle.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce véhicule ? Cette action est irréversible.');" style="display: inline;">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ vehicle.id) }}">
+    <button class="btn-premium btn-premium-danger btn-sm" type="submit">
+        <i class="bi bi-trash"></i> Supprimer
+    </button>
+</form>

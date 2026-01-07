@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle location{% endblock %}
+
+{% block body %}
+<div class="page-header">
+    <h1 class="page-title">Nouvelle location</h1>
+    <p class="page-subtitle">Créez une nouvelle location de véhicule</p>
+</div>
+
+{{ include('rental/_form.html.twig', {
+    button_label: 'Créer la location',
+    cancel_path: path('app_rental_index')
+}) }}
+{% endblock %}

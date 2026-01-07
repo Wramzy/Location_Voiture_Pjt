@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau client{% endblock %}
+
+{% block body %}
+<div class="page-header">
+    <h1 class="page-title">Nouveau client</h1>
+    <p class="page-subtitle">Ajoutez un nouveau client à votre base de données</p>
+</div>
+
+{{ include('client/_form.html.twig', {
+    button_label: 'Créer le client',
+    cancel_path: path('app_client_index')
+}) }}
+{% endblock %}

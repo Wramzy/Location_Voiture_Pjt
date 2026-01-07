@@ -1,0 +1,50 @@
+{% set cancel_path = cancel_path|default(null) %}
+
+{{ form_start(form, {'attr': {'class': 'premium-card'}}) }}
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="form-group">
+                {{ form_label(form.client, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.client, {'attr': {'class': 'form-select'}}) }}
+                {{ form_errors(form.client) }}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                {{ form_label(form.vehicle, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.vehicle, {'attr': {'class': 'form-select'}}) }}
+                {{ form_errors(form.vehicle) }}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                {{ form_label(form.dateDebut, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.dateDebut, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.dateDebut) }}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                {{ form_label(form.dateFin, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.dateFin, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.dateFin) }}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                {{ form_label(form.statut, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.statut, {'attr': {'class': 'form-select'}}) }}
+                {{ form_errors(form.statut) }}
+            </div>
+        </div>
+    </div>
+    <div class="d-flex gap-3 mt-4 pt-4" style="border-top: 2px solid var(--gray-200);">
+        <button class="btn-premium btn-premium-primary" type="submit">
+            <i class="bi bi-check-circle"></i>
+            {{ button_label|default('Enregistrer') }}
+        </button>
+        {% if cancel_path %}
+            <a href="{{ cancel_path }}" class="btn-premium btn-premium-secondary">Annuler</a>
+        {% endif %}
+    </div>
+{{ form_end(form) }}

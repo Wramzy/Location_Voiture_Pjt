@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Véhicules{% endblock %}
+
+{% block body %}
+<div class="page-header">
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+        <div>
+            <h1 class="page-title">Véhicules</h1>
+            <p class="page-subtitle">Gestion complète du parc automobile</p>
+        </div>
+        <a href="{{ path('app_vehicle_new') }}" class="btn-premium btn-premium-success">
+            <i class="bi bi-plus-circle"></i>
+            Nouveau véhicule
+        </a>
+    </div>
+</div>
+
+<div class="premium-card">
+    <div style="overflow-x: auto;">
+        <table class="premium-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Marque / Modèle</th>
+                    <th>Année</th>
+                    <th>Immatriculation</th>
+                    <th>Statut</th>
+                    <th style="text-align: right;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for vehicle in vehicles %}
+                    <tr>
+                        <td><span style="color: var(--gray-500); font-weight: 600;">#{{ vehicle.id }}</span></td>
+                        <td>
+                            <div style="font-weight: 700; color: var(--gray-900); font-size: 15px;">
+                                {{ vehicle.marque }} {{ vehicle.modele }}
+                            </div>
+                        </td>
+                        <td style="font-weight: 500;">{{ vehicle.annee }}</td>
+                        <td>
+                            <span style="font-family: 'Courier New', monospace; font-size: 13px; color: var(--gray-600); background: var(--gray-100); padding: 4px 10px; border-radius: var(--radius-md); font-weight: 600;">
+                                {{ vehicle.immatriculation }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if vehicle.statut == 'disponible' %}
+                                <span class="badge-premium badge-success">
+                                    <i class="bi bi-check-circle"></i> Disponible
+                                </span>
+                            {% elseif vehicle.statut == 'loué' %}
+                                <span class="badge-premium badge-warning">
+                                    <i class="bi bi-calendar-check"></i> Loué
+                                </span>
+                            {% else %}
+                                <span class="badge-premium badge-danger">
+                                    <i class="bi bi-tools"></i> Maintenance
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td style="text-align: right;">
+                            <div class="d-flex gap-2 justify-content-end">
+                                <a href="{{ path('app_vehicle_show', {'id': vehicle.id}) }}" class="btn-premium btn-premium-secondary btn-sm">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="{{ path('app_vehicle_edit', {'id': vehicle.id}) }}" class="btn-premium btn-premium-primary btn-sm">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 80px 20px;">
+                            <div style="width: 120px; height: 120px; margin: 0 auto 24px; background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1)); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="bi bi-inbox" style="font-size: 64px; color: var(--primary); opacity: 0.5;"></i>
+                            </div>
+                            <h3 style="font-weight: 700; color: var(--gray-900); margin-bottom: 8px;">Aucun véhicule</h3>
+                            <p style="color: var(--gray-500); margin-bottom: 24px;">Commencez par ajouter votre premier véhicule</p>
+                            <a href="{{ path('app_vehicle_new') }}" class="btn-premium btn-premium-success">
+                                <i class="bi bi-plus-circle"></i> Ajouter le premier véhicule
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

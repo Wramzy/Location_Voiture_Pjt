@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau véhicule{% endblock %}
+
+{% block body %}
+<div class="page-header">
+    <h1 class="page-title">Nouveau véhicule</h1>
+    <p class="page-subtitle">Ajoutez un nouveau véhicule à votre parc automobile</p>
+</div>
+
+{{ include('vehicle/_form.html.twig', {
+    button_label: 'Créer le véhicule',
+    cancel_path: path('app_vehicle_index')
+}) }}
+{% endblock %}

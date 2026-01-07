@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier véhicule{% endblock %}
+
+{% block body %}
+<div class="page-header">
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+        <div>
+            <h1 class="page-title">Modifier le véhicule</h1>
+            <p class="page-subtitle">Mettez à jour les informations du véhicule</p>
+        </div>
+        {{ include('vehicle/_delete_form.html.twig') }}
+    </div>
+</div>
+
+{{ include('vehicle/_form.html.twig', {
+    button_label: 'Mettre à jour',
+    cancel_path: path('app_vehicle_index')
+}) }}
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Locations{% endblock %}
+
+{% block body %}
+<div class="page-header">
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+        <div>
+            <h1 class="page-title">Locations</h1>
+            <p class="page-subtitle">Suivi complet des locations de véhicules</p>
+        </div>
+        <a href="{{ path('app_rental_new') }}" class="btn-premium btn-premium-success">
+            <i class="bi bi-plus-circle"></i>
+            Nouvelle location
+        </a>
+    </div>
+</div>
+
+<div class="premium-card">
+    <div style="overflow-x: auto;">
+        <table class="premium-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Client</th>
+                    <th>Véhicule</th>
+                    <th>Date début</th>
+                    <th>Date fin</th>
+                    <th>Statut</th>
+                    <th style="text-align: right;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rental in rentals %}
+                    <tr>
+                        <td><span style="color: var(--gray-500); font-weight: 600;">#{{ rental.id }}</span></td>
+                        <td>
+                            <div style="font-weight: 700; color: var(--gray-900); font-size: 15px;">
+                                {{ rental.client.prenom }} {{ rental.client.nom }}
+                            </div>
+                        </td>
+                        <td>
+                            <div style="font-weight: 600; color: var(--gray-900);">
+                                {{ rental.vehicle.marque }} {{ rental.vehicle.modele }}
+                            </div>
+                            <small style="color: var(--gray-500); font-size: 12px; font-family: 'Courier New', monospace;">
+                                {{ rental.vehicle.immatriculation }}
+                            </small>
+                        </td>
+                        <td style="font-weight: 500;">{{ rental.dateDebut|date('d/m/Y H:i') }}</td>
+                        <td style="font-weight: 500;">{{ rental.dateFin|date('d/m/Y H:i') }}</td>
+                        <td>
+                            {% if rental.statut == 'en cours' %}
+                                <span class="badge-premium badge-warning">
+                                    <i class="bi bi-clock"></i> En cours
+                                </span>
+                            {% else %}
+                                <span class="badge-premium badge-success">
+                                    <i class="bi bi-check-circle"></i> Terminée
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td style="text-align: right;">
+                            <div class="d-flex gap-2 justify-content-end">
+                                <a href="{{ path('app_rental_show', {'id': rental.id}) }}" class="btn-premium btn-premium-secondary btn-sm">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="{{ path('app_rental_edit', {'id': rental.id}) }}" class="btn-premium btn-premium-primary btn-sm">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 80px 20px;">
+                            <div style="width: 120px; height: 120px; margin: 0 auto 24px; background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1)); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="bi bi-calendar-x" style="font-size: 64px; color: var(--primary); opacity: 0.5;"></i>
+                            </div>
+                            <h3 style="font-weight: 700; color: var(--gray-900); margin-bottom: 8px;">Aucune location</h3>
+                            <p style="color: var(--gray-500); margin-bottom: 24px;">Créez votre première location de véhicule</p>
+                            <a href="{{ path('app_rental_new') }}" class="btn-premium btn-premium-success">
+                                <i class="bi bi-plus-circle"></i> Créer la première location
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
